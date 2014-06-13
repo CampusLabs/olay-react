@@ -30,7 +30,8 @@ The name of the transition to use, defaults to `olay-fade` which is provided in
 
 #### transitionEnter/transitionLeave
 
-Boolean values that determine when transitions should be used. They each default to `true` when `transitionName` exists.
+Boolean values that determine when transitions should be used, each default to
+`true`.
 
 #### children
 

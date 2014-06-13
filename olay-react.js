@@ -93,17 +93,12 @@
     },
 
     render: function () {
-      var transitionName = this.props.transitionName;
-      var transitionEnter =
-        !!transitionName && this.props.transitionEnter !== false;
-      var transitionLeave =
-        !!transitionName && this.props.transitionLeave !== false;
       return this.transferPropsTo(
         CSSTransitionGroup({
           component: React.DOM.div,
-          transitionName: transitionName,
-          transitionEnter: transitionEnter,
-          transitionLeave: transitionLeave
+          transitionName: this.props.transitionName,
+          transitionEnter: this.props.transitionEnter,
+          transitionLeave: this.props.transitionLeave
         }, this.renderChild(this.props.children))
       );
     }
