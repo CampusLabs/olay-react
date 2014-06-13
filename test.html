@@ -1,0 +1,47 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Olay-React Test</title>
+    <link href='olay-react.css' rel='stylesheet' />
+    <script src='bower_components/react/react-with-addons.js'></script>
+    <script src='bower_components/cursors/cursors.js'></script>
+    <script src='olay-react.js'></script>
+    <script src='test.js'></script>
+    <style>
+    body {
+      padding: 20px;
+      text-align: center;
+    }
+    body,
+    input {
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+    .user-name,
+    input {
+      display: inline-block;
+      width: 50px;
+      margin: 10px;
+      text-align: left;
+      vertical-align: bottom;
+    }
+    .olay-container {
+      background: rgba(0, 0, 0, .75);
+    }
+    .olay-cell {
+      padding: 20px;
+    }
+    .olay-content {
+      padding: 100px;
+      background: #fff;
+      text-align: center;
+    }
+    </style>
+  </head>
+
+  <body>
+    <h1>OlayReact Demo</h1>
+
+    <div id='users-list'></div>
+  </body>
+</html>
