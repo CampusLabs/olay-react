@@ -26,7 +26,7 @@ Provide an `onClose` function to be called when the Olay would like to be closed
 #### transitionName
 
 The name of the transition to use, defaults to `olay-fade` which is provided in
-[olay.css](olay.css).
+[olay-react.css](olay-react.css).
 
 #### transitionEnter/transitionLeave
 
