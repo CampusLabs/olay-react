@@ -44,7 +44,7 @@
       };
     },
 
-    handleClose: function () {
+    closeOlay: function () {
       this.update('currentUserIndex', {$set: null});
     },
 
@@ -75,7 +75,7 @@
       return (
         React.DOM.div(null,
           this.state.users.map(this.renderUserListItem),
-          OlayReact({onClose: this.handleClose}, this.renderCurrentUser())
+          OlayReact({close: this.closeOlay}, this.renderCurrentUser())
         )
       );
     }

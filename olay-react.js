@@ -18,7 +18,7 @@
     var which = ev.which;
     for (var i = 0, l = keys.length; i < l; ++i) {
       if (which !== keys[i]) continue;
-      last.props.onClose();
+      last.props.close();
       return false;
     }
   });
@@ -40,7 +40,7 @@
 
   return React.createClass({
     propTypes: {
-      onClose: React.PropTypes.func.isRequired
+      close: React.PropTypes.func.isRequired
     },
 
     getDefaultProps: function () {
@@ -71,7 +71,7 @@
       if (!this.props.closeOnClick) return;
       var target = ev.target;
       var content = this.refs.content.getDOMNode();
-      if (!content.contains(target)) this.props.onClose();
+      if (!content.contains(target)) this.props.close();
     },
 
     renderChild: function (child) {

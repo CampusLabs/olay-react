@@ -19,9 +19,12 @@ OlayReact is a normal React component. To open or close the Olay, simply add or 
 
 ### Properties
 
-#### onClose `required`
+#### close `required`
 
-Provide an `onClose` function to be called when the Olay would like to be closed. This function should ensure the OlayReact component will have no children in it the next time `render` is called.
+Provide a `close` function to be invoked when an action has dictated that the
+Olay should be closed. This function should ensure the OlayReact component will
+have no children in it the next time `render` is called. See the test file for
+an example of using React `state` to manage the state of the Olay's visibility.
 
 #### transitionName
 
