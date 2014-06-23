@@ -1,0 +1,14 @@
+{
+  "name": "olay-react",
+  "version": "0.0.2",
+  "author": "Casey Foster <c@sey.me>",
+  "licence": "MIT",
+  "main": "olay-react.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orgsync/olay-react"
+  },
+  "dependencies": {
+    "react": "x"
+  }
+}

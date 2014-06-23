@@ -1,13 +1,15 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['react/addons'], factory);
+    define(['react'], factory);
   } else if (typeof exports !== 'undefined') {
-    module.exports = factory(require('react/addons'));
+    module.exports = factory(require('react'));
   } else {
     root.OlayReact = factory(root.React);
   }
 })(this, function (React) {
   'use strict';
+
+  var DOM = React.DOM;
 
   var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -80,10 +82,10 @@
       if (!child) return [];
 
       return (
-        React.DOM.div({className: 'olay-container', onClick: this.handleClick},
-          React.DOM.div({className: 'olay-table'},
-            React.DOM.div({className: 'olay-cell'},
-              React.DOM.div({ref: 'content',className: 'olay-content'},
+        DOM.div({className: 'olay-container', onClick: this.handleClick},
+          DOM.div({className: 'olay-table'},
+            DOM.div({className: 'olay-cell'},
+              DOM.div({ref: 'content',className: 'olay-content'},
                 child
               )
             )
@@ -95,7 +97,7 @@
     render: function () {
       return this.transferPropsTo(
         CSSTransitionGroup({
-          component: React.DOM.div,
+          component: DOM.div,
           transitionName: this.props.transitionName,
           transitionEnter: this.props.transitionEnter,
           transitionLeave: this.props.transitionLeave

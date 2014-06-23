@@ -3,10 +3,15 @@
   "version": "0.0.2",
   "ignore": [
     "/.gitignore",
+    "/.npmignore",
+    "/node_modules",
+    "/package.json",
     "/test.*"
   ],
+  "dependencies": {
+    "react": "x"
+  },
   "devDependencies": {
-    "react": "0.10.0",
-    "cursors": "0.0.7"
+    "cursors": "x"
   }
 }
