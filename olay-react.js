@@ -40,6 +40,14 @@
     if (!active.length) document.body.classList.remove('olay-active');
   };
 
+  var childrenExist = function (component) {
+    var exist = false;
+    React.Children.forEach(component.props.children, function (child) {
+      if (child) exist = true;
+    });
+    return exist;
+  };
+
   return React.createClass({
     propTypes: {
       close: React.PropTypes.func.isRequired
@@ -66,28 +74,29 @@
     },
 
     setActive: function () {
-      this.props.children ? activate(this) : deactivate(this);
+      childrenExist(this) ? activate(this) : deactivate(this);
     },
 
     handleClick: function (ev) {
       if (!this.props.closeOnClick) return;
       var target = ev.target;
-      var content = this.refs.content.getDOMNode();
-      if (!content.contains(target)) this.props.close();
+      var captured = false;
+      React.Children.forEach(this.props.children, function (child) {
+        if (child.getDOMNode().contains(target)) captured = true;
+      });
+      if (!captured) this.props.close();
     },
 
-    renderChild: function (child) {
+    renderChildren: function () {
 
       // INFO: Returning [] is necessary until React > 0.10.0.
-      if (!child) return [];
+      if (!childrenExist(this)) return [];
 
       return (
         DOM.div({className: 'olay-container', onClick: this.handleClick},
           DOM.div({className: 'olay-table'},
             DOM.div({className: 'olay-cell'},
-              DOM.div({ref: 'content', className: 'olay-content'},
-                child
-              )
+              this.props.children
             )
           )
         )
@@ -101,7 +110,7 @@
           transitionName: this.props.transitionName,
           transitionEnter: this.props.transitionEnter,
           transitionLeave: this.props.transitionLeave
-        }, this.renderChild(this.props.children))
+        }, this.renderChildren())
       );
     }
   });

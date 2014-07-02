@@ -21,15 +21,9 @@
 }
 
 .olay-cell {
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.olay-content {
-  display: inline-block;
   position: relative;
-  text-align: left;
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .olay-fade-enter-active,

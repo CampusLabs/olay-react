@@ -64,7 +64,7 @@
       var user = this.state.users[this.state.currentUserIndex];
       if (!user) return;
       return (
-        React.DOM.div({style: {color: user.color}},
+        React.DOM.div({className: 'current-user', style: {color: user.color}},
           React.DOM.h1(null, user.name + "'s Olay!"),
           UsersList({cursors: {users: this.getCursor('users')}})
         )
@@ -75,7 +75,9 @@
       return (
         React.DOM.div(null,
           this.state.users.map(this.renderUserListItem),
-          OlayReact({close: this.closeOlay}, this.renderCurrentUser())
+          OlayReact({close: this.closeOlay},
+            this.renderCurrentUser()
+          )
         )
       );
     }
