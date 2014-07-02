@@ -40,12 +40,12 @@
     if (!active.length) document.body.classList.remove('olay-active');
   };
 
+  var identity = function (obj) {
+    return obj;
+  };
+
   var childrenExist = function (component) {
-    var exist = false;
-    React.Children.forEach(component.props.children, function (child) {
-      if (child) exist = true;
-    });
-    return exist;
+    return [].concat(component.props.children).some(identity);
   };
 
   return React.createClass({
@@ -80,11 +80,9 @@
     handleClick: function (ev) {
       if (!this.props.closeOnClick) return;
       var target = ev.target;
-      var captured = false;
-      React.Children.forEach(this.props.children, function (child) {
-        if (child.getDOMNode().contains(target)) captured = true;
-      });
-      if (!captured) this.props.close();
+      var els = [].slice.call(this.refs.cell.getDOMNode().children);
+      var containsTarget = function (el) { return el.contains(target); };
+      if (!els.some(containsTarget)) this.props.close();
     },
 
     renderChildren: function () {
@@ -95,7 +93,7 @@
       return (
         DOM.div({className: 'olay-container', onClick: this.handleClick},
           DOM.div({className: 'olay-table'},
-            DOM.div({className: 'olay-cell'},
+            DOM.div({ref: 'cell', className: 'olay-cell'},
               this.props.children
             )
           )
