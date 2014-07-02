@@ -85,7 +85,7 @@
         DOM.div({className: 'olay-container', onClick: this.handleClick},
           DOM.div({className: 'olay-table'},
             DOM.div({className: 'olay-cell'},
-              DOM.div({ref: 'content',className: 'olay-content'},
+              DOM.div({ref: 'content', className: 'olay-content'},
                 child
               )
             )
