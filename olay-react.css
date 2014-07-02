@@ -27,9 +27,9 @@
 }
 
 .olay-fade-enter-active,
-.olay-fade-enter-active .olay-content,
+.olay-fade-enter-active .olay-table,
 .olay-fade-leave-active,
-.olay-fade-leave-active .olay-content {
+.olay-fade-leave-active .olay-table {
   -webkit-transition: all .25s cubic-bezier(.5, 0, .5, 1);
   -moz-transition: all .25s cubic-bezier(.5, 0, .5, 1);
   -ms-transition: all .25s cubic-bezier(.5, 0, .5, 1);
@@ -47,8 +47,8 @@
   opacity: 1;
 }
 
-.olay-fade-enter .olay-content,
-.olay-fade-leave.olay-fade-leave-active .olay-content {
+.olay-fade-enter .olay-table,
+.olay-fade-leave.olay-fade-leave-active .olay-table {
   -webkit-transform: scale(.95);
   -moz-transform: scale(.95);
   -ms-transform: scale(.95);
@@ -56,8 +56,8 @@
   transform: scale(.95);
 }
 
-.olay-fade-enter.olay-fade-enter-active .olay-content,
-.olay-fade-leave .olay-content {
+.olay-fade-enter.olay-fade-enter-active .olay-table,
+.olay-fade-leave .olay-table {
   -webkit-transform: scale(1);
   -moz-transform: scale(1);
   -ms-transform: scale(1);
