@@ -40,14 +40,6 @@
     if (!active.length) document.body.classList.remove('olay-active');
   };
 
-  var identity = function (obj) {
-    return obj;
-  };
-
-  var childrenExist = function (component) {
-    return [].concat(component.props.children).some(identity);
-  };
-
   return React.createClass({
     propTypes: {
       close: React.PropTypes.func.isRequired
@@ -74,7 +66,9 @@
     },
 
     setActive: function () {
-      childrenExist(this) ? activate(this) : deactivate(this);
+      React.Children.count(this.props.children) ?
+      activate(this) :
+      deactivate(this);
     },
 
     handleClick: function (ev) {
@@ -86,16 +80,12 @@
     },
 
     renderChildren: function () {
-
-      // INFO: Returning [] is necessary until React > 0.10.0.
-      if (!childrenExist(this)) return [];
-
+      var children = this.props.children;
+      if (!React.Children.count(children)) return;
       return (
         DOM.div({className: 'olay-container', onClick: this.handleClick},
           DOM.div({className: 'olay-table'},
-            DOM.div({ref: 'cell', className: 'olay-cell'},
-              this.props.children
-            )
+            DOM.div({ref: 'cell', className: 'olay-cell'}, children)
           )
         )
       );

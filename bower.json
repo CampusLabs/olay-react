@@ -1,6 +1,6 @@
 {
   "name": "olay-react",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "ignore": [
     "/.gitignore",
     "/.npmignore",
@@ -9,7 +9,7 @@
     "/test.*"
   ],
   "dependencies": {
-    "react": "x"
+    "react": "^0.11.0"
   },
   "devDependencies": {
     "cursors": "x"

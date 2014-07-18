@@ -9,11 +9,11 @@
     mixins: [Cursors],
 
     handleChange: function (ev) {
-      this.update('user', {color: {$set: ev.target.value}});
+      this.update({user: {color: {$set: ev.target.value}}});
     },
 
     handleClick: function () {
-      this.update('currentUserIndex', {$set: this.props.key});
+      this.update({currentUserIndex: {$set: this.props.key}});
     },
 
     render: function () {
@@ -45,7 +45,7 @@
     },
 
     closeOlay: function () {
-      this.update('currentUserIndex', {$set: null});
+      this.update({currentUserIndex: {$set: null}});
     },
 
     renderUserListItem: function (user, i) {
