@@ -76,7 +76,10 @@
       var target = ev.target;
       var els = [].slice.call(this.refs.cell.getDOMNode().children);
       var containsTarget = function (el) { return el.contains(target); };
-      if (!els.some(containsTarget)) this.props.close();
+      if (!els.some(containsTarget)) {
+        this.props.close();
+        ev.stopPropagation();
+      }
     },
 
     renderChildren: function () {
