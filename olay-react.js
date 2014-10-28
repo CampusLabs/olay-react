@@ -47,6 +47,7 @@
 
     getDefaultProps: function () {
       return {
+        component: 'div',
         transitionName: 'olay-fade',
         closeOnKeys: [27],
         closeOnClick: true
@@ -98,12 +99,7 @@
     },
 
     render: function () {
-      return CSSTransitionGroup(React.__spread({
-        component: 'div',
-        transitionName: this.props.transitionName,
-        transitionEnter: this.props.transitionEnter,
-        transitionLeave: this.props.transitionLeave
-      }, this.props), this.renderChildren());
+      return CSSTransitionGroup(this.props, this.renderChildren());
     }
   });
 });
