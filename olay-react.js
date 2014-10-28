@@ -11,7 +11,7 @@
 
   var DOM = React.DOM;
 
-  var CSSTransitionGroup = React.addons.CSSTransitionGroup;
+  var CSSTransitionGroup = React.createFactory(React.addons.CSSTransitionGroup);
 
   document.addEventListener('keydown', function (ev) {
     if (!active.length) return;
@@ -85,24 +85,25 @@
     renderChildren: function () {
       var children = this.props.children;
       if (!React.Children.count(children)) return;
-      return (
-        DOM.div({className: 'olay-container', onClick: this.handleClick},
-          DOM.div({className: 'olay-table'},
-            DOM.div({ref: 'cell', className: 'olay-cell'}, children)
+      return React.createElement('div', {
+        className: 'olay-container',
+        onClick: this.handleClick
+      },
+        React.createElement('div', {className: 'olay-table'},
+          React.createElement('div', {ref: 'cell', className: 'olay-cell'},
+            children
           )
         )
       );
     },
 
     render: function () {
-      return this.transferPropsTo(
-        CSSTransitionGroup({
-          component: DOM.div,
-          transitionName: this.props.transitionName,
-          transitionEnter: this.props.transitionEnter,
-          transitionLeave: this.props.transitionLeave
-        }, this.renderChildren())
-      );
+      return CSSTransitionGroup(React.__spread({
+        component: 'div',
+        transitionName: this.props.transitionName,
+        transitionEnter: this.props.transitionEnter,
+        transitionLeave: this.props.transitionLeave
+      }, this.props), this.renderChildren());
     }
   });
 });

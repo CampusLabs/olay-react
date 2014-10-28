@@ -2,10 +2,11 @@
   'use strict';
 
   var Cursors = root.Cursors;
-  var OlayReact = root.OlayReact;
   var React = root.React;
 
-  var UserListItem = React.createClass({
+  var OlayReact = React.createFactory(root.OlayReact);
+
+  var UserListItem = React.createFactory(React.createClass({
     mixins: [Cursors],
 
     handleChange: function (ev) {
@@ -13,18 +14,20 @@
     },
 
     handleClick: function () {
-      this.update({currentUserIndex: {$set: this.props.key}});
+      this.update({currentUserIndex: {$set: this.props.index}});
     },
 
     render: function () {
       return (
-        React.DOM.div({style: {color: this.state.user.color}},
-          React.DOM.span({className: 'user-name'}, this.state.user.name),
-          React.DOM.input({
+        React.createElement('div', {style: {color: this.state.user.color}},
+          React.createElement('span', {className: 'user-name'},
+            this.state.user.name
+          ),
+          React.createElement('input', {
             onChange: this.handleChange,
             value: this.state.user.color
           }),
-          React.DOM.input({
+          React.createElement('input', {
             type: 'button',
             onClick: this.handleClick,
             value: 'Olay!'
@@ -32,15 +35,14 @@
         )
       );
     }
-  });
+  }));
 
-  var UsersList = React.createClass({
+  var UsersList = React.createFactory(React.createClass({
     mixins: [Cursors],
 
     getInitialState: function () {
       return {
-        users: this.props.users,
-        currentUserIndex: null
+        users: this.props.users
       };
     },
 
@@ -52,6 +54,7 @@
       return (
         UserListItem({
           key: i,
+          index: i,
           cursors: {
             user: this.getCursor('users', i),
             currentUserIndex: this.getCursor('currentUserIndex')
@@ -64,8 +67,11 @@
       var user = this.state.users[this.state.currentUserIndex];
       if (!user) return;
       return (
-        React.DOM.div({className: 'current-user', style: {color: user.color}},
-          React.DOM.h1(null, user.name + "'s Olay!"),
+        React.createElement('div', {
+          className: 'current-user',
+          style: {color: user.color}
+        },
+          React.createElement('h1', null, user.name + "'s Olay!"),
           UsersList({cursors: {users: this.getCursor('users')}})
         )
       );
@@ -73,7 +79,7 @@
 
     render: function () {
       return (
-        React.DOM.div(null,
+        React.createElement('div', null,
           this.state.users.map(this.renderUserListItem),
           OlayReact({close: this.closeOlay},
             this.renderCurrentUser()
@@ -81,10 +87,10 @@
         )
       );
     }
-  });
+  }));
 
   document.addEventListener('DOMContentLoaded', function () {
-    React.renderComponent(UsersList({
+    React.render(UsersList({
       users: [
         {name: 'Casey', color: 'orange'},
         {name: 'Lacey', color: 'teal'},
