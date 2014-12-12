@@ -9,6 +9,12 @@
 bower install olay-react
 ```
 
+## Browser Support
+
+OlayReact supports all of the modern browsers out of the box. To support older
+versions of IE (<= 9), you will need to include a shim to add [classList]
+support.
+
 ## API
 
 ### Top-Level
@@ -52,3 +58,4 @@ full example.
 
 [Olay]: https://github.com/orgsync/olay
 [React]: https://github.com/facebook/react
+[classList]: https://developer.mozilla.org/en-US/docs/Web/API/Element.classList
