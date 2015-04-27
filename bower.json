@@ -1,6 +1,10 @@
 {
   "name": "olay-react",
-  "version": "0.4.1",
+  "main": [
+    "olay-react.js",
+    "olay-react.css"
+  ],
+  "version": "0.4.2",
   "ignore": [
     "/.gitignore",
     "/.npmignore",
