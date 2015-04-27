@@ -1,6 +1,6 @@
 {
   "name": "olay-react",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": "Casey Foster <c@sey.me>",
   "licence": "MIT",
   "main": "olay-react.js",
@@ -9,6 +9,6 @@
     "url": "https://github.com/orgsync/olay-react"
   },
   "dependencies": {
-    "react": "^0.12.0"
+    "react": ">= 0.12.0 < 0.14.0"
   }
 }
