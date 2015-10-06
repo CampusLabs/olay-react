@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 
 let ReactDOM = typeof window === 'object' && window.ReactDOM || React;
 try { ReactDOM = require('react-dom'); } catch (er) {}
-const {findDOMNode} = ReactDOM;
 
 const {CSSTransitionGroup} = React.addons;
 
@@ -54,7 +53,7 @@ export default class extends Component {
   }
 
   componentDidMount() {
-    document.body.appendChild(this.el = document.createElement('div'));
+    document.body.appendChild(this.remote = document.createElement('div'));
     this.mounted = true;
     this.update();
   }
@@ -66,14 +65,16 @@ export default class extends Component {
   componentWillUnmount() {
     this.mounted = false;
     this.update();
-    setTimeout(
-      () => document.body.removeChild(this.el),
-      this.props.transitionLeaveTimeout
-    );
+    setTimeout(::this.unmountRemote, this.props.transitionLeaveTimeout);
+  }
+
+  unmountRemote() {
+    ReactDOM.unmountComponentAtNode(this.remote);
+    document.body.removeChild(this.remote);
   }
 
   update() {
-    ReactDOM.render(this.actualRender(), this.el);
+    ReactDOM.render(this.renderRemote(), this.remote);
     if (this.isActive()) activate(this); else deactivate(this);
   }
 
@@ -85,7 +86,7 @@ export default class extends Component {
     const {close, closeOnClick} = this.props;
     if (!closeOnClick) return;
     const target = ev.target;
-    const els = [].slice.call(findDOMNode(this.cell).children);
+    const els = [].slice.call(ReactDOM.findDOMNode(this.cell).children);
     const containsTarget = function (el) { return el.contains(target); };
     if (!els.some(containsTarget)) {
       close();
@@ -106,7 +107,7 @@ export default class extends Component {
     );
   }
 
-  actualRender() {
+  renderRemote() {
     return (
       <CSSTransitionGroup {...this.props}>
         {this.renderChildren()}

@@ -29,8 +29,7 @@
   try {
     ReactDOM = require('react-dom');
   } catch (er) {}
-  var _ReactDOM = ReactDOM;
-  var findDOMNode = _ReactDOM.findDOMNode;
+
   var CSSTransitionGroup = _React['default'].addons.CSSTransitionGroup;
 
   document.addEventListener('keydown', function (ev) {
@@ -72,7 +71,7 @@
     _createClass(_default, [{
       key: 'componentDidMount',
       value: function componentDidMount() {
-        document.body.appendChild(this.el = document.createElement('div'));
+        document.body.appendChild(this.remote = document.createElement('div'));
         this.mounted = true;
         this.update();
       }
@@ -84,18 +83,20 @@
     }, {
       key: 'componentWillUnmount',
       value: function componentWillUnmount() {
-        var _this = this;
-
         this.mounted = false;
         this.update();
-        setTimeout(function () {
-          return document.body.removeChild(_this.el);
-        }, this.props.transitionLeaveTimeout);
+        setTimeout(this.unmountRemote.bind(this), this.props.transitionLeaveTimeout);
+      }
+    }, {
+      key: 'unmountRemote',
+      value: function unmountRemote() {
+        ReactDOM.unmountComponentAtNode(this.remote);
+        document.body.removeChild(this.remote);
       }
     }, {
       key: 'update',
       value: function update() {
-        ReactDOM.render(this.actualRender(), this.el);
+        ReactDOM.render(this.renderRemote(), this.remote);
         if (this.isActive()) activate(this);else deactivate(this);
       }
     }, {
@@ -112,7 +113,7 @@
 
         if (!closeOnClick) return;
         var target = ev.target;
-        var els = [].slice.call(findDOMNode(this.cell).children);
+        var els = [].slice.call(ReactDOM.findDOMNode(this.cell).children);
         var containsTarget = function containsTarget(el) {
           return el.contains(target);
         };
@@ -124,7 +125,7 @@
     }, {
       key: 'renderChildren',
       value: function renderChildren() {
-        var _this2 = this;
+        var _this = this;
 
         if (!this.isActive()) return;
         return _React['default'].createElement(
@@ -136,7 +137,7 @@
             _React['default'].createElement(
               'div',
               { ref: function (c) {
-                  return _this2.cell = c;
+                  return _this.cell = c;
                 }, className: 'olay-cell' },
               this.props.children
             )
@@ -144,8 +145,8 @@
         );
       }
     }, {
-      key: 'actualRender',
-      value: function actualRender() {
+      key: 'renderRemote',
+      value: function renderRemote() {
         return _React['default'].createElement(
           CSSTransitionGroup,
           this.props,
