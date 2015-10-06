@@ -52,10 +52,8 @@ export default class extends Component {
     transitionName: 'olay-fade'
   }
 
-  componentDidMount() {
-    document.body.appendChild(this.remote = document.createElement('div'));
-    this.mounted = true;
-    this.update();
+  componentWillMount() {
+    requestAnimationFrame(::this.mountRemote);
   }
 
   componentDidUpdate() {
@@ -68,13 +66,23 @@ export default class extends Component {
     setTimeout(::this.unmountRemote, this.props.transitionLeaveTimeout);
   }
 
+  mountRemote() {
+    document.body.appendChild(this.remote = document.createElement('div'));
+    this.mounted = true;
+    this.update();
+  }
+
   unmountRemote() {
+    requestAnimationFrame(::this.reallyUnmountRemote);
+  }
+
+  reallyUnmountRemote() {
     ReactDOM.unmountComponentAtNode(this.remote);
     document.body.removeChild(this.remote);
   }
 
   update() {
-    ReactDOM.render(this.renderRemote(), this.remote);
+    if (this.remote) ReactDOM.render(this.renderRemote(), this.remote);
     if (this.isActive()) activate(this); else deactivate(this);
   }
 

@@ -69,11 +69,9 @@
     }
 
     _createClass(_default, [{
-      key: 'componentDidMount',
-      value: function componentDidMount() {
-        document.body.appendChild(this.remote = document.createElement('div'));
-        this.mounted = true;
-        this.update();
+      key: 'componentWillMount',
+      value: function componentWillMount() {
+        requestAnimationFrame(this.mountRemote.bind(this));
       }
     }, {
       key: 'componentDidUpdate',
@@ -88,15 +86,27 @@
         setTimeout(this.unmountRemote.bind(this), this.props.transitionLeaveTimeout);
       }
     }, {
+      key: 'mountRemote',
+      value: function mountRemote() {
+        document.body.appendChild(this.remote = document.createElement('div'));
+        this.mounted = true;
+        this.update();
+      }
+    }, {
       key: 'unmountRemote',
       value: function unmountRemote() {
+        requestAnimationFrame(this.reallyUnmountRemote.bind(this));
+      }
+    }, {
+      key: 'reallyUnmountRemote',
+      value: function reallyUnmountRemote() {
         ReactDOM.unmountComponentAtNode(this.remote);
         document.body.removeChild(this.remote);
       }
     }, {
       key: 'update',
       value: function update() {
-        ReactDOM.render(this.renderRemote(), this.remote);
+        if (this.remote) ReactDOM.render(this.renderRemote(), this.remote);
         if (this.isActive()) activate(this);else deactivate(this);
       }
     }, {
