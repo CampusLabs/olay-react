@@ -82,8 +82,7 @@
       key: 'componentWillUnmount',
       value: function componentWillUnmount() {
         this.mounted = false;
-        this.update();
-        setTimeout(this.unmountRemote.bind(this), this.props.transitionLeaveTimeout);
+        this.update(setTimeout.bind(null, this.unmountRemote.bind(this), this.props.transitionLeaveTimeout));
       }
     }, {
       key: 'mountRemote',
@@ -105,8 +104,8 @@
       }
     }, {
       key: 'update',
-      value: function update() {
-        if (this.remote) ReactDOM.render(this.renderRemote(), this.remote);
+      value: function update(cb) {
+        if (this.remote) ReactDOM.render(this.renderRemote(), this.remote, cb);
         if (this.isActive()) activate(this);else deactivate(this);
       }
     }, {

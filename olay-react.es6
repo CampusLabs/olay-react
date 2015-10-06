@@ -62,8 +62,10 @@ export default class extends Component {
 
   componentWillUnmount() {
     this.mounted = false;
-    this.update();
-    setTimeout(::this.unmountRemote, this.props.transitionLeaveTimeout);
+    this.update(setTimeout.bind(null,
+      ::this.unmountRemote,
+      this.props.transitionLeaveTimeout
+    ));
   }
 
   mountRemote() {
@@ -81,8 +83,8 @@ export default class extends Component {
     document.body.removeChild(this.remote);
   }
 
-  update() {
-    if (this.remote) ReactDOM.render(this.renderRemote(), this.remote);
+  update(cb) {
+    if (this.remote) ReactDOM.render(this.renderRemote(), this.remote, cb);
     if (this.isActive()) activate(this); else deactivate(this);
   }
 
