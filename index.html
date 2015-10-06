@@ -2,12 +2,12 @@
 
 <html>
   <head>
-    <title>OlayReact Test</title>
+    <title>OlayReact</title>
     <link href='olay-react.css' rel='stylesheet' />
-    <script src='bower_components/react/react-with-addons.js'></script>
-    <script src='bower_components/cursors/cursors.js'></script>
+    <script src='node_modules/react/dist/react-with-addons.js'></script>
+    <script src='node_modules/react/dist/react-dom.js'></script>
     <script src='olay-react.js'></script>
-    <script src='test.js'></script>
+    <script src='examples/index.js'></script>
     <style>
     body {
       padding: 20px;
@@ -42,5 +42,17 @@
   <body>
     <h1>OlayReact Test</h1>
     <div id='users-list'></div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        window.ReactDOM.render(window.React.createFactory(window.index)({
+          users: [
+            {name: 'Casey', color: 'orange'},
+            {name: 'Lacey', color: 'teal'},
+            {name: 'Gunner', color: 'blue'},
+            {name: 'Loki', color: 'red'}
+          ]
+        }), document.getElementById('users-list'));
+      });
+    </script>
   </body>
 </html>
