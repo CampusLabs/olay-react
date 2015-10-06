@@ -70,15 +70,10 @@
     }
 
     _createClass(_default, [{
-      key: 'componentWillUnmount',
-      value: function componentWillUnmount() {
-        deactivate(this);
-        document.body.removeChild(this.el);
-      }
-    }, {
       key: 'componentDidMount',
       value: function componentDidMount() {
         document.body.appendChild(this.el = document.createElement('div'));
+        this.mounted = true;
         this.update();
       }
     }, {
@@ -87,15 +82,26 @@
         this.update();
       }
     }, {
+      key: 'componentWillUnmount',
+      value: function componentWillUnmount() {
+        var _this = this;
+
+        this.mounted = false;
+        this.update();
+        setTimeout(function () {
+          return document.body.removeChild(_this.el);
+        }, this.props.transitionLeaveTimeout);
+      }
+    }, {
       key: 'update',
       value: function update() {
         ReactDOM.render(this.actualRender(), this.el);
-        this.setActive();
+        if (this.isActive()) activate(this);else deactivate(this);
       }
     }, {
-      key: 'setActive',
-      value: function setActive() {
-        if (_React['default'].Children.count(this.props.children)) activate(this);else deactivate(this);
+      key: 'isActive',
+      value: function isActive() {
+        return this.mounted && _React['default'].Children.count(this.props.children);
       }
     }, {
       key: 'handleClick',
@@ -118,11 +124,9 @@
     }, {
       key: 'renderChildren',
       value: function renderChildren() {
-        var _this = this;
+        var _this2 = this;
 
-        var children = this.props.children;
-
-        if (!_React['default'].Children.count(children)) return;
+        if (!this.isActive()) return;
         return _React['default'].createElement(
           'div',
           { className: 'olay-container', onClick: this.handleClick.bind(this) },
@@ -132,9 +136,9 @@
             _React['default'].createElement(
               'div',
               { ref: function (c) {
-                  return _this.cell = c;
+                  return _this2.cell = c;
                 }, className: 'olay-cell' },
-              children
+              this.props.children
             )
           )
         );
@@ -159,7 +163,10 @@
         children: _react.PropTypes.any,
         close: _react.PropTypes.func.isRequired,
         closeOnClick: _react.PropTypes.bool,
-        closeOnKeys: _react.PropTypes.arrayOf(_react.PropTypes.number)
+        closeOnKeys: _react.PropTypes.arrayOf(_react.PropTypes.number),
+        transitionEnterTimeout: _react.PropTypes.number,
+        transitionLeaveTimeout: _react.PropTypes.number,
+        transitionName: _react.PropTypes.string
       },
       enumerable: true
     }, {

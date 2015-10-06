@@ -38,7 +38,10 @@ export default class extends Component {
     children: PropTypes.any,
     close: PropTypes.func.isRequired,
     closeOnClick: PropTypes.bool,
-    closeOnKeys: PropTypes.arrayOf(PropTypes.number)
+    closeOnKeys: PropTypes.arrayOf(PropTypes.number),
+    transitionEnterTimeout: PropTypes.number,
+    transitionLeaveTimeout: PropTypes.number,
+    transitionName: PropTypes.string
   }
 
   static defaultProps = {
@@ -50,13 +53,9 @@ export default class extends Component {
     transitionName: 'olay-fade'
   }
 
-  componentWillUnmount() {
-    deactivate(this);
-    document.body.removeChild(this.el);
-  }
-
   componentDidMount() {
     document.body.appendChild(this.el = document.createElement('div'));
+    this.mounted = true;
     this.update();
   }
 
@@ -64,14 +63,22 @@ export default class extends Component {
     this.update();
   }
 
-  update() {
-    ReactDOM.render(this.actualRender(), this.el);
-    this.setActive();
+  componentWillUnmount() {
+    this.mounted = false;
+    this.update();
+    setTimeout(
+      () => document.body.removeChild(this.el),
+      this.props.transitionLeaveTimeout
+    );
   }
 
-  setActive() {
-    if (React.Children.count(this.props.children)) activate(this);
-    else deactivate(this);
+  update() {
+    ReactDOM.render(this.actualRender(), this.el);
+    if (this.isActive()) activate(this); else deactivate(this);
+  }
+
+  isActive() {
+    return this.mounted && React.Children.count(this.props.children);
   }
 
   handleClick(ev) {
@@ -87,12 +94,13 @@ export default class extends Component {
   }
 
   renderChildren() {
-    const {children} = this.props;
-    if (!React.Children.count(children)) return;
+    if (!this.isActive()) return;
     return (
       <div className='olay-container' onClick={::this.handleClick}>
         <div className='olay-table'>
-          <div ref={c => this.cell = c} className='olay-cell'>{children}</div>
+          <div ref={c => this.cell = c} className='olay-cell'>
+            {this.props.children}
+          </div>
         </div>
       </div>
     );
