@@ -4,7 +4,7 @@
     "olay-react.js",
     "olay-react.css"
   ],
-  "version": "0.5.0",
+  "version": "0.5.1",
   "ignore": [
     "/.gitignore",
     "/.npmignore",
