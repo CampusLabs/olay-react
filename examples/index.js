@@ -119,14 +119,18 @@
         var user = users[currentUserIndex];
         if (!user) return;
         return _React['default'].createElement(
-          'div',
-          { className: 'current-user', style: { color: user.color } },
+          _OlayReact['default'],
+          { close: this.closeOlay.bind(this) },
           _React['default'].createElement(
-            'h1',
-            null,
-            user.name + '\'s Olay!'
-          ),
-          _React['default'].createElement(UsersList, { users: users, onColorChange: this.handleColorChange.bind(this) })
+            'div',
+            { className: 'current-user', style: { color: user.color } },
+            _React['default'].createElement(
+              'h1',
+              null,
+              user.name + '\'s Olay!'
+            ),
+            _React['default'].createElement(UsersList, { users: users, onColorChange: this.handleColorChange.bind(this) })
+          )
         );
       }
     }, {
@@ -136,11 +140,7 @@
           'div',
           null,
           this.state.users.map(this.renderUserListItem.bind(this)),
-          _React['default'].createElement(
-            _OlayReact['default'],
-            { close: this.closeOlay.bind(this) },
-            this.renderCurrentUser()
-          )
+          this.renderCurrentUser()
         );
       }
     }]);

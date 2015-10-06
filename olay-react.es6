@@ -38,6 +38,8 @@ export default class extends Component {
     close: PropTypes.func.isRequired,
     closeOnClick: PropTypes.bool,
     closeOnKeys: PropTypes.arrayOf(PropTypes.number),
+    transitionAppear: PropTypes.bool,
+    transitionAppearTimeout: PropTypes.number,
     transitionEnterTimeout: PropTypes.number,
     transitionLeaveTimeout: PropTypes.number,
     transitionName: PropTypes.string
@@ -47,9 +49,11 @@ export default class extends Component {
     closeOnKeys: [27],
     closeOnClick: true,
     component: 'div',
+    transitionAppear: true,
+    transitionAppearTimeout: 250,
     transitionEnterTimeout: 250,
     transitionLeaveTimeout: 250,
-    transitionName: 'olay-fade'
+    transitionName: 'olay-fade',
   }
 
   componentWillMount() {
@@ -57,12 +61,13 @@ export default class extends Component {
   }
 
   componentDidUpdate() {
-    this.update();
+    this.renderRemote();
   }
 
   componentWillUnmount() {
-    this.mounted = false;
-    this.update(setTimeout.bind(null,
+    deactivate(this);
+    this.renderRemote(setTimeout.bind(
+      null,
       ::this.unmountRemote,
       this.props.transitionLeaveTimeout
     ));
@@ -70,8 +75,8 @@ export default class extends Component {
 
   mountRemote() {
     document.body.appendChild(this.remote = document.createElement('div'));
-    this.mounted = true;
-    this.update();
+    this.renderRemote();
+    activate(this);
   }
 
   unmountRemote() {
@@ -81,15 +86,6 @@ export default class extends Component {
   reallyUnmountRemote() {
     ReactDOM.unmountComponentAtNode(this.remote);
     document.body.removeChild(this.remote);
-  }
-
-  update(cb) {
-    if (this.remote) ReactDOM.render(this.renderRemote(), this.remote, cb);
-    if (this.isActive()) activate(this); else deactivate(this);
-  }
-
-  isActive() {
-    return this.mounted && React.Children.count(this.props.children);
   }
 
   handleClick(ev) {
@@ -104,25 +100,22 @@ export default class extends Component {
     }
   }
 
-  renderChildren() {
-    if (!this.isActive()) return;
-    return (
-      <div className='olay-container' onClick={::this.handleClick}>
-        <div className='olay-table'>
-          <div ref={c => this.cell = c} className='olay-cell'>
-            {this.props.children}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  renderRemote() {
-    return (
+  renderRemote(cb) {
+    if (!this.remote) return;
+    ReactDOM.render(
       <CSSTransitionGroup {...this.props}>
-        {this.renderChildren()}
+        {
+          cb ? null :
+          <div className='olay-container' onClick={::this.handleClick}>
+            <div className='olay-table'>
+              <div ref={c => this.cell = c} className='olay-cell'>
+                {this.props.children}
+              </div>
+            </div>
+          </div>
+        }
       </CSSTransitionGroup>
-    );
+    , this.remote, cb);
   }
 
   render() {

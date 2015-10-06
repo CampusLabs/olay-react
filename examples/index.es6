@@ -56,10 +56,12 @@ export default class UsersList extends Component {
     const user = users[currentUserIndex];
     if (!user) return;
     return (
-      <div className='current-user' style={{color: user.color}}>
-        <h1>{`${user.name}'s Olay!`}</h1>
-        <UsersList users={users} onColorChange={::this.handleColorChange} />
-      </div>
+      <OlayReact close={::this.closeOlay}>
+        <div className='current-user' style={{color: user.color}}>
+          <h1>{`${user.name}'s Olay!`}</h1>
+          <UsersList users={users} onColorChange={::this.handleColorChange} />
+        </div>
+      </OlayReact>
     );
   }
 
@@ -67,9 +69,7 @@ export default class UsersList extends Component {
     return (
       <div>
         {this.state.users.map(::this.renderUserListItem)}
-        <OlayReact close={::this.closeOlay}>
-          {this.renderCurrentUser()}
-        </OlayReact>
+        {this.renderCurrentUser()}
       </div>
     );
   }

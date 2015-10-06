@@ -76,20 +76,20 @@
     }, {
       key: 'componentDidUpdate',
       value: function componentDidUpdate() {
-        this.update();
+        this.renderRemote();
       }
     }, {
       key: 'componentWillUnmount',
       value: function componentWillUnmount() {
-        this.mounted = false;
-        this.update(setTimeout.bind(null, this.unmountRemote.bind(this), this.props.transitionLeaveTimeout));
+        deactivate(this);
+        this.renderRemote(setTimeout.bind(null, this.unmountRemote.bind(this), this.props.transitionLeaveTimeout));
       }
     }, {
       key: 'mountRemote',
       value: function mountRemote() {
         document.body.appendChild(this.remote = document.createElement('div'));
-        this.mounted = true;
-        this.update();
+        this.renderRemote();
+        activate(this);
       }
     }, {
       key: 'unmountRemote',
@@ -101,17 +101,6 @@
       value: function reallyUnmountRemote() {
         ReactDOM.unmountComponentAtNode(this.remote);
         document.body.removeChild(this.remote);
-      }
-    }, {
-      key: 'update',
-      value: function update(cb) {
-        if (this.remote) ReactDOM.render(this.renderRemote(), this.remote, cb);
-        if (this.isActive()) activate(this);else deactivate(this);
-      }
-    }, {
-      key: 'isActive',
-      value: function isActive() {
-        return this.mounted && _React['default'].Children.count(this.props.children);
       }
     }, {
       key: 'handleClick',
@@ -132,35 +121,30 @@
         }
       }
     }, {
-      key: 'renderChildren',
-      value: function renderChildren() {
+      key: 'renderRemote',
+      value: function renderRemote(cb) {
         var _this = this;
 
-        if (!this.isActive()) return;
-        return _React['default'].createElement(
-          'div',
-          { className: 'olay-container', onClick: this.handleClick.bind(this) },
-          _React['default'].createElement(
-            'div',
-            { className: 'olay-table' },
-            _React['default'].createElement(
-              'div',
-              { ref: function (c) {
-                  return _this.cell = c;
-                }, className: 'olay-cell' },
-              this.props.children
-            )
-          )
-        );
-      }
-    }, {
-      key: 'renderRemote',
-      value: function renderRemote() {
-        return _React['default'].createElement(
+        if (!this.remote) return;
+        ReactDOM.render(_React['default'].createElement(
           CSSTransitionGroup,
           this.props,
-          this.renderChildren()
-        );
+          cb ? null : _React['default'].createElement(
+            'div',
+            { className: 'olay-container', onClick: this.handleClick.bind(this) },
+            _React['default'].createElement(
+              'div',
+              { className: 'olay-table' },
+              _React['default'].createElement(
+                'div',
+                { ref: function (c) {
+                    return _this.cell = c;
+                  }, className: 'olay-cell' },
+                this.props.children
+              )
+            )
+          )
+        ), this.remote, cb);
       }
     }, {
       key: 'render',
@@ -174,6 +158,8 @@
         close: _react.PropTypes.func.isRequired,
         closeOnClick: _react.PropTypes.bool,
         closeOnKeys: _react.PropTypes.arrayOf(_react.PropTypes.number),
+        transitionAppear: _react.PropTypes.bool,
+        transitionAppearTimeout: _react.PropTypes.number,
         transitionEnterTimeout: _react.PropTypes.number,
         transitionLeaveTimeout: _react.PropTypes.number,
         transitionName: _react.PropTypes.string
@@ -185,6 +171,8 @@
         closeOnKeys: [27],
         closeOnClick: true,
         component: 'div',
+        transitionAppear: true,
+        transitionAppearTimeout: 250,
         transitionEnterTimeout: 250,
         transitionLeaveTimeout: 250,
         transitionName: 'olay-fade'
