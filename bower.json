@@ -4,7 +4,7 @@
     "olay-react.js",
     "olay-react.css"
   ],
-  "version": "0.6.0",
+  "version": "0.7.0",
   "ignore": [
     "/.gitignore",
     "/.npmignore",
@@ -13,6 +13,8 @@
     "/test.*"
   ],
   "dependencies": {
-    "react": ">= 0.13.0 < 0.15.0 || ^0.14.0-alpha"
+    "react": ">= 0.14.0 < 0.15.0",
+    "react-addons-css-transition-group": ">= 0.14.0 < 0.15.0",
+    "react-dom": ">= 0.14.0 < 0.15.0"
   }
 }

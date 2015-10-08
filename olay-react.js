@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'module', 'react'], factory);
+    define(['exports', 'module', 'react', 'react-dom', 'react-addons-css-transition-group'], factory);
   } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-    factory(exports, module, require('react'));
+    factory(exports, module, require('react'), require('react-dom'), require('react-addons-css-transition-group'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, mod, global.React);
+    factory(mod.exports, mod, global.React, global.ReactDOM, global.CSSTransitionGroup);
     global.OlayReact = mod.exports;
   }
-})(this, function (exports, module, _react) {
+})(this, function (exports, module, _react, _reactDom, _reactAddonsCssTransitionGroup) {
   'use strict';
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -25,12 +25,9 @@
 
   var _React = _interopRequireDefault(_react);
 
-  var ReactDOM = typeof window === 'object' && window.ReactDOM || _React['default'];
-  try {
-    ReactDOM = require('react-dom');
-  } catch (er) {}
+  var _ReactDOM = _interopRequireDefault(_reactDom);
 
-  var CSSTransitionGroup = _React['default'].addons.CSSTransitionGroup;
+  var _CSSTransitionGroup = _interopRequireDefault(_reactAddonsCssTransitionGroup);
 
   document.addEventListener('keydown', function (ev) {
     if (!active.length) return;
@@ -99,7 +96,7 @@
     }, {
       key: 'reallyUnmountRemote',
       value: function reallyUnmountRemote() {
-        ReactDOM.unmountComponentAtNode(this.remote);
+        _ReactDOM['default'].unmountComponentAtNode(this.remote);
         document.body.removeChild(this.remote);
       }
     }, {
@@ -111,7 +108,7 @@
 
         if (!closeOnClick) return;
         var target = ev.target;
-        var els = [].slice.call(ReactDOM.findDOMNode(this.cell).children);
+        var els = [].slice.call(_ReactDOM['default'].findDOMNode(this.cell).children);
         var containsTarget = function containsTarget(el) {
           return el.contains(target);
         };
@@ -126,8 +123,8 @@
         var _this = this;
 
         if (!this.remote) return;
-        ReactDOM.render(_React['default'].createElement(
-          CSSTransitionGroup,
+        _ReactDOM['default'].render(_React['default'].createElement(
+          _CSSTransitionGroup['default'],
           this.props,
           cb ? null : _React['default'].createElement(
             'div',

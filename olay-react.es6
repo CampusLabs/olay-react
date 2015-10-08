@@ -1,9 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-
-let ReactDOM = typeof window === 'object' && window.ReactDOM || React;
-try { ReactDOM = require('react-dom'); } catch (er) {}
-
-const {CSSTransitionGroup} = React.addons;
+import ReactDOM from 'react-dom';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 document.addEventListener('keydown', function (ev) {
   if (!active.length) return;
