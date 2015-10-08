@@ -90,11 +90,9 @@ export default class extends Component {
     if (!closeOnClick) return;
     const target = ev.target;
     const els = [].slice.call(ReactDOM.findDOMNode(this.cell).children);
-    const containsTarget = function (el) { return el.contains(target); };
-    if (!els.some(containsTarget)) {
-      close();
-      ev.stopPropagation();
-    }
+    if (els.some(el => el.contains(target))) return;
+    close();
+    ev.stopPropagation();
   }
 
   renderRemote(cb) {

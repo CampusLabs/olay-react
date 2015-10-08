@@ -109,13 +109,11 @@
         if (!closeOnClick) return;
         var target = ev.target;
         var els = [].slice.call(_ReactDOM['default'].findDOMNode(this.cell).children);
-        var containsTarget = function containsTarget(el) {
+        if (els.some(function (el) {
           return el.contains(target);
-        };
-        if (!els.some(containsTarget)) {
-          close();
-          ev.stopPropagation();
-        }
+        })) return;
+        close();
+        ev.stopPropagation();
       }
     }, {
       key: 'renderRemote',
