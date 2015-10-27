@@ -9,6 +9,12 @@
 bower install olay-react
 ```
 
+or
+
+```bash
+npm install olay-react
+```
+
 ## Browser Support
 
 OlayReact supports all of the modern browsers out of the box. To support older
