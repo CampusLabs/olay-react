@@ -1,6 +1,6 @@
 {
   "name": "olay-react",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": "Casey Foster <c@sey.me>",
   "license": "MIT",
   "main": "olay-react.js",
@@ -9,9 +9,9 @@
     "url": "https://github.com/orgsync/olay-react"
   },
   "peerDependencies": {
-    "react": ">= 0.14.0 < 0.15.0",
-    "react-addons-css-transition-group": ">= 0.14.0 < 0.15.0",
-    "react-dom": ">= 0.14.0 < 0.15.0"
+    "react": "0.14 || 15",
+    "react-addons-css-transition-group": "0.14 || 15",
+    "react-dom": "0.14 || 15"
   },
   "devDependencies": {
     "cogs": "1.0.7",
