@@ -29,17 +29,19 @@
 
   var _CSSTransitionGroup = _interopRequireDefault(_reactAddonsCssTransitionGroup);
 
-  document.addEventListener('keydown', function (ev) {
-    if (!active.length) return;
-    var last = active[active.length - 1];
-    var keys = last.props.closeOnKeys || [];
-    var which = ev.which;
-    for (var i = 0, l = keys.length; i < l; ++i) {
-      if (which !== keys[i]) continue;
-      last.props.close();
-      return false;
-    }
-  });
+  if (typeof document !== 'undefined') {
+    document.addEventListener('keydown', function (ev) {
+      if (!active.length) return;
+      var last = active[active.length - 1];
+      var keys = last.props.closeOnKeys || [];
+      var which = ev.which;
+      for (var i = 0, l = keys.length; i < l; ++i) {
+        if (which !== keys[i]) continue;
+        last.props.close();
+        return false;
+      }
+    });
+  }
 
   var active = [];
 

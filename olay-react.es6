@@ -2,17 +2,19 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 
-document.addEventListener('keydown', function (ev) {
-  if (!active.length) return;
-  const last = active[active.length - 1];
-  const keys = last.props.closeOnKeys || [];
-  const which = ev.which;
-  for (let i = 0, l = keys.length; i < l; ++i) {
-    if (which !== keys[i]) continue;
-    last.props.close();
-    return false;
-  }
-});
+if (typeof document !== 'undefined') {
+  document.addEventListener('keydown', function (ev) {
+    if (!active.length) return;
+    const last = active[active.length - 1];
+    const keys = last.props.closeOnKeys || [];
+    const which = ev.which;
+    for (let i = 0, l = keys.length; i < l; ++i) {
+      if (which !== keys[i]) continue;
+      last.props.close();
+      return false;
+    }
+  });
+}
 
 const active = [];
 
