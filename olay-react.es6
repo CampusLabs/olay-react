@@ -4,11 +4,13 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 document.addEventListener('keydown', function (ev) {
   if (!active.length) return;
+
   const last = active[active.length - 1];
   const keys = last.props.closeOnKeys || [];
   const which = ev.which;
   for (let i = 0, l = keys.length; i < l; ++i) {
     if (which !== keys[i]) continue;
+
     last.props.close();
     return false;
   }
@@ -18,6 +20,7 @@ const active = [];
 
 const activate = function (component) {
   if (active.indexOf(component) !== -1) return;
+
   active.push(component);
   document.body.classList.add('olay-active');
 };
@@ -25,6 +28,7 @@ const activate = function (component) {
 const deactivate = function (component) {
   const i = active.indexOf(component);
   if (i === -1) return;
+
   active.splice(i, 1);
   if (!active.length) document.body.classList.remove('olay-active');
 };
@@ -50,7 +54,7 @@ export default class extends Component {
     transitionAppearTimeout: 250,
     transitionEnterTimeout: 250,
     transitionLeaveTimeout: 250,
-    transitionName: 'olay-fade',
+    transitionName: 'olay-fade'
   }
 
   componentWillMount() {
@@ -63,16 +67,25 @@ export default class extends Component {
 
   componentWillUnmount() {
     deactivate(this);
-    this.renderRemote(setTimeout.bind(
-      null,
-      ::this.unmountRemote,
-      this.props.transitionLeaveTimeout
-    ));
+    this.renderRemote({
+      unmount: true,
+      cb: () =>
+        setTimeout(::this.unmountRemote, this.props.transitionLeaveTimeout)
+    });
   }
 
   mountRemote() {
+    this.prevActiveElement = document.activeElement;
     document.body.appendChild(this.remote = document.createElement('div'));
-    this.renderRemote();
+    this.renderRemote({
+      cb: () => {
+        const {cell: el} = this;
+        const {tabIndex} = el;
+        el.tabIndex = 0;
+        el.focus();
+        el.tabIndex = tabIndex;
+      }
+    });
     activate(this);
   }
 
@@ -83,11 +96,20 @@ export default class extends Component {
   reallyUnmountRemote() {
     ReactDOM.unmountComponentAtNode(this.remote);
     document.body.removeChild(this.remote);
+
+    const {prevActiveElement: el} = this;
+    if (el) {
+      const {tabIndex} = el;
+      el.tabIndex = 0;
+      el.focus();
+      el.tabIndex = tabIndex;
+    }
   }
 
   handleClick(ev) {
     const {close, closeOnClick} = this.props;
     if (!closeOnClick) return;
+
     const target = ev.target;
     const els = [].slice.call(ReactDOM.findDOMNode(this.cell).children);
     if (els.some(el => el.contains(target))) return;
@@ -95,12 +117,13 @@ export default class extends Component {
     ev.stopPropagation();
   }
 
-  renderRemote(cb) {
+  renderRemote({unmount = false, cb} = {}) {
     if (!this.remote) return;
+
     ReactDOM.render(
       <CSSTransitionGroup {...this.props}>
         {
-          cb ? null :
+          unmount ? null :
           <div className='olay-container' onClick={::this.handleClick}>
             <div className='olay-table'>
               <div ref={c => this.cell = c} className='olay-cell'>

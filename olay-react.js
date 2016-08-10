@@ -15,7 +15,7 @@
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-  var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+  var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -31,11 +31,13 @@
 
   document.addEventListener('keydown', function (ev) {
     if (!active.length) return;
+
     var last = active[active.length - 1];
     var keys = last.props.closeOnKeys || [];
     var which = ev.which;
     for (var i = 0, l = keys.length; i < l; ++i) {
       if (which !== keys[i]) continue;
+
       last.props.close();
       return false;
     }
@@ -45,6 +47,7 @@
 
   var activate = function activate(component) {
     if (active.indexOf(component) !== -1) return;
+
     active.push(component);
     document.body.classList.add('olay-active');
   };
@@ -52,6 +55,7 @@
   var deactivate = function deactivate(component) {
     var i = active.indexOf(component);
     if (i === -1) return;
+
     active.splice(i, 1);
     if (!active.length) document.body.classList.remove('olay-active');
   };
@@ -78,14 +82,33 @@
     }, {
       key: 'componentWillUnmount',
       value: function componentWillUnmount() {
+        var _this = this;
+
         deactivate(this);
-        this.renderRemote(setTimeout.bind(null, this.unmountRemote.bind(this), this.props.transitionLeaveTimeout));
+        this.renderRemote({
+          unmount: true,
+          cb: function cb() {
+            return setTimeout(_this.unmountRemote.bind(_this), _this.props.transitionLeaveTimeout);
+          }
+        });
       }
     }, {
       key: 'mountRemote',
       value: function mountRemote() {
+        var _this2 = this;
+
+        this.prevActiveElement = document.activeElement;
         document.body.appendChild(this.remote = document.createElement('div'));
-        this.renderRemote();
+        this.renderRemote({
+          cb: function cb() {
+            var el = _this2.cell;
+            var tabIndex = el.tabIndex;
+
+            el.tabIndex = 0;
+            el.focus();
+            el.tabIndex = tabIndex;
+          }
+        });
         activate(this);
       }
     }, {
@@ -98,6 +121,16 @@
       value: function reallyUnmountRemote() {
         _ReactDOM['default'].unmountComponentAtNode(this.remote);
         document.body.removeChild(this.remote);
+
+        var el = this.prevActiveElement;
+
+        if (el) {
+          var tabIndex = el.tabIndex;
+
+          el.tabIndex = 0;
+          el.focus();
+          el.tabIndex = tabIndex;
+        }
       }
     }, {
       key: 'handleClick',
@@ -107,6 +140,7 @@
         var closeOnClick = _props.closeOnClick;
 
         if (!closeOnClick) return;
+
         var target = ev.target;
         var els = [].slice.call(_ReactDOM['default'].findDOMNode(this.cell).children);
         if (els.some(function (el) {
@@ -117,14 +151,21 @@
       }
     }, {
       key: 'renderRemote',
-      value: function renderRemote(cb) {
-        var _this = this;
+      value: function renderRemote() {
+        var _this3 = this;
+
+        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        var _ref$unmount = _ref.unmount;
+        var unmount = _ref$unmount === undefined ? false : _ref$unmount;
+        var cb = _ref.cb;
 
         if (!this.remote) return;
+
         _ReactDOM['default'].render(_React['default'].createElement(
           _CSSTransitionGroup['default'],
           this.props,
-          cb ? null : _React['default'].createElement(
+          unmount ? null : _React['default'].createElement(
             'div',
             { className: 'olay-container', onClick: this.handleClick.bind(this) },
             _React['default'].createElement(
@@ -133,7 +174,7 @@
               _React['default'].createElement(
                 'div',
                 { ref: function (c) {
-                    return _this.cell = c;
+                    return _this3.cell = c;
                   }, className: 'olay-cell' },
                 this.props.children
               )
