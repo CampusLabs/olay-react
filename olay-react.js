@@ -60,6 +60,16 @@
     if (!active.length) document.body.classList.remove('olay-active');
   };
 
+  var setFocus = function setFocus(el) {
+    if (!el) return;
+
+    var tabIndex = el.tabIndex;
+
+    el.tabIndex = 0;
+    el.focus();
+    el.tabIndex = tabIndex;
+  };
+
   var _default = (function (_Component) {
     _inherits(_default, _Component);
 
@@ -99,16 +109,9 @@
 
         this.prevActiveElement = document.activeElement;
         document.body.appendChild(this.remote = document.createElement('div'));
-        this.renderRemote({
-          cb: function cb() {
-            var el = _this2.cell;
-            var tabIndex = el.tabIndex;
-
-            el.tabIndex = 0;
-            el.focus();
-            el.tabIndex = tabIndex;
-          }
-        });
+        this.renderRemote({ cb: function cb() {
+            return setFocus(_this2.cell);
+          } });
         activate(this);
       }
     }, {
@@ -121,16 +124,7 @@
       value: function reallyUnmountRemote() {
         _ReactDOM['default'].unmountComponentAtNode(this.remote);
         document.body.removeChild(this.remote);
-
-        var el = this.prevActiveElement;
-
-        if (el) {
-          var tabIndex = el.tabIndex;
-
-          el.tabIndex = 0;
-          el.focus();
-          el.tabIndex = tabIndex;
-        }
+        setFocus(this.prevActiveElement);
       }
     }, {
       key: 'handleClick',

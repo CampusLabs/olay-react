@@ -33,6 +33,15 @@ const deactivate = function (component) {
   if (!active.length) document.body.classList.remove('olay-active');
 };
 
+const setFocus = el => {
+  if (!el) return;
+
+  const {tabIndex} = el;
+  el.tabIndex = 0;
+  el.focus();
+  el.tabIndex = tabIndex;
+};
+
 export default class extends Component {
   static propTypes = {
     children: PropTypes.any,
@@ -77,15 +86,7 @@ export default class extends Component {
   mountRemote() {
     this.prevActiveElement = document.activeElement;
     document.body.appendChild(this.remote = document.createElement('div'));
-    this.renderRemote({
-      cb: () => {
-        const {cell: el} = this;
-        const {tabIndex} = el;
-        el.tabIndex = 0;
-        el.focus();
-        el.tabIndex = tabIndex;
-      }
-    });
+    this.renderRemote({cb: () => setFocus(this.cell)});
     activate(this);
   }
 
@@ -96,14 +97,7 @@ export default class extends Component {
   reallyUnmountRemote() {
     ReactDOM.unmountComponentAtNode(this.remote);
     document.body.removeChild(this.remote);
-
-    const {prevActiveElement: el} = this;
-    if (el) {
-      const {tabIndex} = el;
-      el.tabIndex = 0;
-      el.focus();
-      el.tabIndex = tabIndex;
-    }
+    setFocus(this.prevActiveElement);
   }
 
   handleClick(ev) {
