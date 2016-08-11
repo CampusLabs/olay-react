@@ -57,17 +57,36 @@
     if (i === -1) return;
 
     active.splice(i, 1);
-    if (!active.length) document.body.classList.remove('olay-active');
+    if (!active.length) {
+      var body = document.body;
+
+      body.classList.remove('olay-active');
+      if (!body.className) body.removeAttribute('class');
+    }
   };
 
   var setFocus = function setFocus(el) {
     if (!el) return;
 
-    var tabIndex = el.tabIndex;
+    if (el.tabIndex >= 0) return el.focus();
+
+    var attributes = el.attributes;
+
+    var tabIndex = undefined;
+    for (var i = 0, l = attributes.length; i < l; ++i) {
+      var _attributes$i = attributes[i];
+      var _name = _attributes$i.name;
+      var value = _attributes$i.value;
+
+      if (_name === 'tabindex') {
+        tabIndex = value;
+        break;
+      }
+    }
 
     el.tabIndex = 0;
     el.focus();
-    el.tabIndex = tabIndex;
+    if (tabIndex) el.tabIndex = tabIndex;else el.removeAttribute('tabindex');
   };
 
   var _default = (function (_Component) {

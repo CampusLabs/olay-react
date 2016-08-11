@@ -30,16 +30,32 @@ const deactivate = function (component) {
   if (i === -1) return;
 
   active.splice(i, 1);
-  if (!active.length) document.body.classList.remove('olay-active');
+  if (!active.length) {
+    const {body} = document;
+    body.classList.remove('olay-active');
+    if (!body.className) body.removeAttribute('class');
+  }
 };
 
 const setFocus = el => {
   if (!el) return;
 
-  const {tabIndex} = el;
+  if (el.tabIndex >= 0) return el.focus();
+
+  const {attributes} = el;
+  let tabIndex;
+  for (let i = 0, l = attributes.length; i < l; ++i) {
+    const {name, value} = attributes[i];
+    if (name === 'tabindex') {
+      tabIndex = value;
+      break;
+    }
+  }
+
   el.tabIndex = 0;
   el.focus();
-  el.tabIndex = tabIndex;
+  if (tabIndex) el.tabIndex = tabIndex;
+  else el.removeAttribute('tabindex');
 };
 
 export default class extends Component {
