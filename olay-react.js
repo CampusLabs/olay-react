@@ -29,6 +29,8 @@
 
   var _CSSTransitionGroup = _interopRequireDefault(_reactAddonsCssTransitionGroup);
 
+  var FOCUSABLE = ['[contenteditable]', '[tabindex]', 'a', 'button', 'embed', 'iframe', 'input', 'object', 'select', 'textarea'].join(', ');
+
   document.addEventListener('keydown', function (ev) {
     if (!active.length) return;
 
@@ -49,6 +51,7 @@
     if (active.indexOf(component) !== -1) return;
 
     active.push(component);
+    restrictFocusTo(component.remote);
     document.body.classList.add('olay-active');
   };
 
@@ -57,11 +60,52 @@
     if (i === -1) return;
 
     active.splice(i, 1);
-    if (!active.length) {
+    if (active.length) {
+      restrictFocusTo(active[active.length - 1].remote);
+    } else {
+      restrictFocusTo(document.body);
       var body = document.body;
 
       body.classList.remove('olay-active');
       if (!body.className) body.removeAttribute('class');
+    }
+  };
+
+  var getTabIndex = function getTabIndex(el) {
+    var attributes = el.attributes;
+
+    for (var i = 0, l = attributes.length; i < l; ++i) {
+      var _attributes$i = attributes[i];
+      var _name = _attributes$i.name;
+      var value = _attributes$i.value;
+
+      if (_name === 'tabindex') return value;
+    }
+  };
+
+  var saveTabIndex = function saveTabIndex(el) {
+    if ('olaySavedTabIndex' in el) return;
+
+    el.olaySavedTabIndex = getTabIndex(el);
+  };
+
+  var restoreTabIndex = function restoreTabIndex(el) {
+    if (!('olaySavedTabIndex' in el)) return;
+
+    if (el.olaySavedTabIndex) el.tabIndex = el.olaySavedTabIndex;else el.removeAttribute('tabindex');
+    delete el.olaySavedTabIndex;
+  };
+
+  var restrictFocusTo = function restrictFocusTo(parent) {
+    var els = document.body.querySelectorAll(FOCUSABLE);
+    for (var i = 0, l = els.length; i < l; ++i) {
+      var el = els[i];
+      if (parent.contains(el)) {
+        restoreTabIndex(els[i]);
+      } else {
+        saveTabIndex(els[i]);
+        els[i].tabIndex = -1;
+      }
     }
   };
 
@@ -70,23 +114,10 @@
 
     if (el.tabIndex >= 0) return el.focus();
 
-    var attributes = el.attributes;
-
-    var tabIndex = undefined;
-    for (var i = 0, l = attributes.length; i < l; ++i) {
-      var _attributes$i = attributes[i];
-      var _name = _attributes$i.name;
-      var value = _attributes$i.value;
-
-      if (_name === 'tabindex') {
-        tabIndex = value;
-        break;
-      }
-    }
-
+    saveTabIndex(el);
     el.tabIndex = 0;
     el.focus();
-    if (tabIndex) el.tabIndex = tabIndex;else el.removeAttribute('tabindex');
+    restoreTabIndex(el);
   };
 
   var _default = (function (_Component) {
@@ -113,7 +144,6 @@
       value: function componentWillUnmount() {
         var _this = this;
 
-        deactivate(this);
         this.renderRemote({
           unmount: true,
           cb: function cb() {
@@ -128,10 +158,10 @@
 
         this.prevActiveElement = document.activeElement;
         document.body.appendChild(this.remote = document.createElement('div'));
+        activate(this);
         this.renderRemote({ cb: function cb() {
             return setFocus(_this2.cell);
           } });
-        activate(this);
       }
     }, {
       key: 'unmountRemote',
@@ -142,6 +172,7 @@
       key: 'reallyUnmountRemote',
       value: function reallyUnmountRemote() {
         _ReactDOM['default'].unmountComponentAtNode(this.remote);
+        deactivate(this);
         document.body.removeChild(this.remote);
         setFocus(this.prevActiveElement);
       }
