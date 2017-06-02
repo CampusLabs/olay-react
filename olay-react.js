@@ -1,33 +1,95 @@
 (function (global, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['exports', 'module', 'react', 'react-dom', 'react-addons-css-transition-group'], factory);
-  } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-    factory(exports, module, require('react'), require('react-dom'), require('react-addons-css-transition-group'));
+  if (typeof define === "function" && define.amd) {
+    define(['exports', 'react-transition-group/CSSTransitionGroup', 'prop-types', 'react', 'react-dom'], factory);
+  } else if (typeof exports !== "undefined") {
+    factory(exports, require('react-transition-group/CSSTransitionGroup'), require('prop-types'), require('react'), require('react-dom'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, mod, global.React, global.ReactDOM, global.CSSTransitionGroup);
+    factory(mod.exports, global.CSSTransitionGroup, global.PropTypes, global.React, global.ReactDOM);
     global.OlayReact = mod.exports;
   }
-})(this, function (exports, module, _react, _reactDom, _reactAddonsCssTransitionGroup) {
+})(this, function (exports, _CSSTransitionGroup, _propTypes, _react, _reactDom) {
   'use strict';
 
-  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 
-  var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+  var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  var _react2 = _interopRequireDefault(_react);
 
-  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+  var _reactDom2 = _interopRequireDefault(_reactDom);
 
-  var _React = _interopRequireDefault(_react);
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
-  var _ReactDOM = _interopRequireDefault(_reactDom);
+  function _objectWithoutProperties(obj, keys) {
+    var target = {};
 
-  var _CSSTransitionGroup = _interopRequireDefault(_reactAddonsCssTransitionGroup);
+    for (var i in obj) {
+      if (keys.indexOf(i) >= 0) continue;
+      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+      target[i] = obj[i];
+    }
+
+    return target;
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var _createClass = function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  }();
+
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
 
   var FOCUSABLE = ['[contenteditable]', '[tabindex]', 'a', 'button', 'embed', 'iframe', 'input', 'object', 'select', 'textarea'].join(', ');
 
@@ -64,7 +126,8 @@
       restrictFocusTo(active[active.length - 1].remote);
     } else {
       restrictFocusTo(document.body);
-      var body = document.body;
+      var _document = document,
+          body = _document.body;
 
       body.classList.remove('olay-active');
       if (!body.className) body.removeAttribute('class');
@@ -75,11 +138,11 @@
     var attributes = el.attributes;
 
     for (var i = 0, l = attributes.length; i < l; ++i) {
-      var _attributes$i = attributes[i];
-      var _name = _attributes$i.name;
-      var value = _attributes$i.value;
+      var _attributes$i = attributes[i],
+          name = _attributes$i.name,
+          value = _attributes$i.value;
 
-      if (_name === 'tabindex') return value;
+      if (name === 'tabindex') return value;
     }
   };
 
@@ -120,16 +183,16 @@
     restoreTabIndex(el);
   };
 
-  var _default = (function (_Component) {
-    _inherits(_default, _Component);
+  var _class = function (_Component) {
+    _inherits(_class, _Component);
 
-    function _default() {
-      _classCallCheck(this, _default);
+    function _class() {
+      _classCallCheck(this, _class);
 
-      _get(Object.getPrototypeOf(_default.prototype), 'constructor', this).apply(this, arguments);
+      return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
     }
 
-    _createClass(_default, [{
+    _createClass(_class, [{
       key: 'componentWillMount',
       value: function componentWillMount() {
         requestAnimationFrame(this.mountRemote.bind(this));
@@ -142,25 +205,25 @@
     }, {
       key: 'componentWillUnmount',
       value: function componentWillUnmount() {
-        var _this = this;
+        var _this2 = this;
 
         this.renderRemote({
           unmount: true,
           cb: function cb() {
-            return setTimeout(_this.unmountRemote.bind(_this), _this.props.transitionLeaveTimeout);
+            return setTimeout(_this2.unmountRemote.bind(_this2), _this2.props.transitionLeaveTimeout);
           }
         });
       }
     }, {
       key: 'mountRemote',
       value: function mountRemote() {
-        var _this2 = this;
+        var _this3 = this;
 
         this.prevActiveElement = document.activeElement;
         document.body.appendChild(this.remote = document.createElement('div'));
         activate(this);
         this.renderRemote({ cb: function cb() {
-            return setFocus(_this2.cell);
+            return setFocus(_this3.cell);
           } });
       }
     }, {
@@ -171,7 +234,7 @@
     }, {
       key: 'reallyUnmountRemote',
       value: function reallyUnmountRemote() {
-        _ReactDOM['default'].unmountComponentAtNode(this.remote);
+        _reactDom2.default.unmountComponentAtNode(this.remote);
         deactivate(this);
         document.body.removeChild(this.remote);
         setFocus(this.prevActiveElement);
@@ -179,14 +242,14 @@
     }, {
       key: 'handleClick',
       value: function handleClick(ev) {
-        var _props = this.props;
-        var close = _props.close;
-        var closeOnClick = _props.closeOnClick;
+        var _props = this.props,
+            close = _props.close,
+            closeOnClick = _props.closeOnClick;
 
         if (!closeOnClick) return;
 
         var target = ev.target;
-        var els = [].slice.call(_ReactDOM['default'].findDOMNode(this.cell).children);
+        var els = [].slice.call(_reactDom2.default.findDOMNode(this.cell).children);
         if (els.some(function (el) {
           return el.contains(target);
         })) return;
@@ -196,31 +259,37 @@
     }, {
       key: 'renderRemote',
       value: function renderRemote() {
-        var _this3 = this;
+        var _this4 = this;
 
-        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-        var _ref$unmount = _ref.unmount;
-        var unmount = _ref$unmount === undefined ? false : _ref$unmount;
-        var cb = _ref.cb;
+        var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            _ref$unmount = _ref.unmount,
+            unmount = _ref$unmount === undefined ? false : _ref$unmount,
+            cb = _ref.cb;
 
         if (!this.remote) return;
 
-        _ReactDOM['default'].render(_React['default'].createElement(
-          _CSSTransitionGroup['default'],
-          this.props,
-          unmount ? null : _React['default'].createElement(
+        var _props2 = this.props,
+            children = _props2.children,
+            close = _props2.close,
+            closeOnClick = _props2.closeOnClick,
+            closeOnKeys = _props2.closeOnKeys,
+            rest = _objectWithoutProperties(_props2, ['children', 'close', 'closeOnClick', 'closeOnKeys']);
+
+        _reactDom2.default.render(_react2.default.createElement(
+          _CSSTransitionGroup2.default,
+          rest,
+          unmount ? null : _react2.default.createElement(
             'div',
             { className: 'olay-container', onClick: this.handleClick.bind(this) },
-            _React['default'].createElement(
+            _react2.default.createElement(
               'div',
               { className: 'olay-table' },
-              _React['default'].createElement(
+              _react2.default.createElement(
                 'div',
-                { ref: function (c) {
-                    return _this3.cell = c;
+                { ref: function ref(c) {
+                    return _this4.cell = c;
                   }, className: 'olay-cell' },
-                this.props.children
+                children
               )
             )
           )
@@ -231,37 +300,32 @@
       value: function render() {
         return null;
       }
-    }], [{
-      key: 'propTypes',
-      value: {
-        children: _react.PropTypes.any,
-        close: _react.PropTypes.func.isRequired,
-        closeOnClick: _react.PropTypes.bool,
-        closeOnKeys: _react.PropTypes.arrayOf(_react.PropTypes.number),
-        transitionAppear: _react.PropTypes.bool,
-        transitionAppearTimeout: _react.PropTypes.number,
-        transitionEnterTimeout: _react.PropTypes.number,
-        transitionLeaveTimeout: _react.PropTypes.number,
-        transitionName: _react.PropTypes.string
-      },
-      enumerable: true
-    }, {
-      key: 'defaultProps',
-      value: {
-        closeOnKeys: [27],
-        closeOnClick: true,
-        component: 'div',
-        transitionAppear: true,
-        transitionAppearTimeout: 250,
-        transitionEnterTimeout: 250,
-        transitionLeaveTimeout: 250,
-        transitionName: 'olay-fade'
-      },
-      enumerable: true
     }]);
 
-    return _default;
-  })(_react.Component);
+    return _class;
+  }(_react.Component);
 
-  module.exports = _default;
+  _class.propTypes = {
+    children: _propTypes2.default.any,
+    close: _propTypes2.default.func.isRequired,
+    closeOnClick: _propTypes2.default.bool,
+    closeOnKeys: _propTypes2.default.arrayOf(_propTypes2.default.number),
+    component: _propTypes2.default.node,
+    transitionAppear: _propTypes2.default.bool,
+    transitionAppearTimeout: _propTypes2.default.number,
+    transitionEnterTimeout: _propTypes2.default.number,
+    transitionLeaveTimeout: _propTypes2.default.number,
+    transitionName: _propTypes2.default.string
+  };
+  _class.defaultProps = {
+    closeOnKeys: [27],
+    closeOnClick: true,
+    component: 'div',
+    transitionAppear: true,
+    transitionAppearTimeout: 250,
+    transitionEnterTimeout: 250,
+    transitionLeaveTimeout: 250,
+    transitionName: 'olay-fade'
+  };
+  exports.default = _class;
 });

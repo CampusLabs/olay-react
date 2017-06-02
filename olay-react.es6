@@ -1,6 +1,7 @@
-import React, {Component, PropTypes} from 'react';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import PropTypes from 'prop-types';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 const FOCUSABLE = [
   '[contenteditable]',
@@ -106,6 +107,7 @@ export default class extends Component {
     close: PropTypes.func.isRequired,
     closeOnClick: PropTypes.bool,
     closeOnKeys: PropTypes.arrayOf(PropTypes.number),
+    component: PropTypes.node,
     transitionAppear: PropTypes.bool,
     transitionAppearTimeout: PropTypes.number,
     transitionEnterTimeout: PropTypes.number,
@@ -172,14 +174,15 @@ export default class extends Component {
   renderRemote({unmount = false, cb} = {}) {
     if (!this.remote) return;
 
+    const {children, close, closeOnClick, closeOnKeys, ...rest} = this.props;
     ReactDOM.render(
-      <CSSTransitionGroup {...this.props}>
+      <CSSTransitionGroup {...rest}>
         {
           unmount ? null :
           <div className='olay-container' onClick={::this.handleClick}>
             <div className='olay-table'>
               <div ref={c => this.cell = c} className='olay-cell'>
-                {this.props.children}
+                {children}
               </div>
             </div>
           </div>
