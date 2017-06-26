@@ -16,20 +16,21 @@ const FOCUSABLE = [
   'textarea'
 ].join(', ');
 
-document.addEventListener('keydown', ev => {
-  if (!active.length) return;
+if (typeof document !== 'undefined') {
+  document.addEventListener('keydown', ev => {
+    if (!active.length) return;
 
-  const last = active[active.length - 1];
-  const keys = last.props.closeOnKeys || [];
-  const which = ev.which;
-  for (let i = 0, l = keys.length; i < l; ++i) {
-    if (which !== keys[i]) continue;
+    const last = active[active.length - 1];
+    const keys = last.props.closeOnKeys || [];
+    const which = ev.which;
+    for (let i = 0, l = keys.length; i < l; ++i) {
+      if (which !== keys[i]) continue;
 
-    last.props.close();
-    return false;
-  }
-});
-
+      last.props.close();
+      return false;
+    }
+  });
+}
 const active = [];
 
 const activate = component => {

@@ -93,20 +93,21 @@
 
   var FOCUSABLE = ['[contenteditable]', '[tabindex]', 'a', 'button', 'embed', 'iframe', 'input', 'object', 'select', 'textarea'].join(', ');
 
-  document.addEventListener('keydown', function (ev) {
-    if (!active.length) return;
+  if (typeof document !== 'undefined') {
+    document.addEventListener('keydown', function (ev) {
+      if (!active.length) return;
 
-    var last = active[active.length - 1];
-    var keys = last.props.closeOnKeys || [];
-    var which = ev.which;
-    for (var i = 0, l = keys.length; i < l; ++i) {
-      if (which !== keys[i]) continue;
+      var last = active[active.length - 1];
+      var keys = last.props.closeOnKeys || [];
+      var which = ev.which;
+      for (var i = 0, l = keys.length; i < l; ++i) {
+        if (which !== keys[i]) continue;
 
-      last.props.close();
-      return false;
-    }
-  });
-
+        last.props.close();
+        return false;
+      }
+    });
+  }
   var active = [];
 
   var activate = function activate(component) {
