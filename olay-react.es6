@@ -1,7 +1,8 @@
-import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import CSSTransition from 'react-transition-group/CSSTransition';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import TransitionGroup from 'react-transition-group/TransitionGroup';
 
 const FOCUSABLE = [
   '[contenteditable]',
@@ -104,27 +105,21 @@ const setFocus = el => {
 
 export default class extends Component {
   static propTypes = {
+    appear: PropTypes.bool,
     children: PropTypes.any,
+    classNames: PropTypes.any,
     close: PropTypes.func.isRequired,
     closeOnClick: PropTypes.bool,
     closeOnKeys: PropTypes.arrayOf(PropTypes.number),
-    component: PropTypes.node,
-    transitionAppear: PropTypes.bool,
-    transitionAppearTimeout: PropTypes.number,
-    transitionEnterTimeout: PropTypes.number,
-    transitionLeaveTimeout: PropTypes.number,
-    transitionName: PropTypes.string
+    timeout: PropTypes.any.isRequired
   }
 
   static defaultProps = {
-    closeOnKeys: [27],
+    appear: true,
+    classNames: 'olay-fade',
     closeOnClick: true,
-    component: 'div',
-    transitionAppear: true,
-    transitionAppearTimeout: 250,
-    transitionEnterTimeout: 250,
-    transitionLeaveTimeout: 250,
-    transitionName: 'olay-fade'
+    closeOnKeys: [27],
+    timeout: 250
   }
 
   componentWillMount() {
@@ -136,10 +131,10 @@ export default class extends Component {
   }
 
   componentWillUnmount() {
+    const {timeout} = this.props;
     this.renderRemote({
       unmount: true,
-      cb: () =>
-        setTimeout(::this.unmountRemote, this.props.transitionLeaveTimeout)
+      cb: () => setTimeout(::this.unmountRemote, timeout.leave || timeout)
     });
   }
 
@@ -175,20 +170,22 @@ export default class extends Component {
   renderRemote({unmount = false, cb} = {}) {
     if (!this.remote) return;
 
-    const {children, close, closeOnClick, closeOnKeys, ...rest} = this.props;
+    const {appear, children, classNames, timeout} = this.props;
     ReactDOM.render(
-      <CSSTransitionGroup {...rest}>
+      <TransitionGroup>
         {
           unmount ? null :
-          <div className='olay-container' onClick={::this.handleClick}>
-            <div className='olay-table'>
-              <div ref={c => this.cell = c} className='olay-cell'>
-                {children}
+          <CSSTransition {...{appear, classNames, timeout}} key='0'>
+            <div className='olay-container' onClick={::this.handleClick}>
+              <div className='olay-table'>
+                <div ref={c => this.cell = c} className='olay-cell'>
+                  {children}
+                </div>
               </div>
             </div>
-          </div>
+          </CSSTransition>
         }
-      </CSSTransitionGroup>
+      </TransitionGroup>
     , this.remote, cb);
   }
 

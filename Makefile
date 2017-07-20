@@ -3,4 +3,4 @@ COGS=$(BIN)cogs
 
 dev:
 	npm install
-	$(COGS) -w examples/index.es6,olay-react.es6
+	$(COGS) -w examples/index.es6 -w olay-react.es6

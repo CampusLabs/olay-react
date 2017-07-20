@@ -1,6 +1,6 @@
 {
   "name": "olay-react",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "author": "Casey Foster <c@sey.me>",
   "license": "MIT",
   "main": "olay-react.js",
@@ -13,15 +13,19 @@
   },
   "peerDependencies": {
     "react-dom": "0.14 || 15",
-    "react-transition-group": "1",
+    "react-transition-group": "2",
     "react": "0.14 || 15"
   },
   "devDependencies": {
-    "babel-plugin-transform-es2015-modules-umd": "6.12.0",
-    "babel-preset-es2015": "6.14.0",
-    "babel-preset-react": "6.11.1",
-    "babel-preset-stage-0": "6.5.0",
-    "cogs": "3.1.5",
-    "cogs-transformer-babel": "3.0.0"
+    "babel-preset-es2015": "6",
+    "babel-preset-react": "6",
+    "babel-preset-stage-0": "6",
+    "cogs-transformer-babel": "3",
+    "cogs-transformer-concat-commonjs": "3",
+    "cogs-transformer-replace": "3",
+    "cogs": "3",
+    "react-dom": "15",
+    "react-transition-group": "2",
+    "react": "15"
   }
 }

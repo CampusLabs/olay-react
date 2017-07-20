@@ -1,25 +1,25 @@
-module.exports = {
-  transformers: [
-    {
-      name: 'babel',
-      options: {
-        presets: ['es2015', 'stage-0', 'react'],
-        plugins: [['transform-es2015-modules-umd', {
-          globals: {
-            'olay-react': 'OlayReact',
-            'prop-types': 'PropTypes',
-            'react-dom': 'ReactDOM',
-            'react-transition-group/CSSTransitionGroup': 'CSSTransitionGroup',
-            react: 'React'
-          },
-          moduleId: 'olay-react',
-          exactGlobals: true
-        }]]
+module.exports = [
+  {
+    transformers: [
+      {name: 'babel', options: {presets: ['es2015', 'stage-0', 'react']}}
+    ],
+    builds: {'olay-react.es6': 'olay-react.js'}
+  },
+  {
+    transformers: [
+      {
+        name: 'replace',
+        options: {
+          flags: 'g',
+          patterns: {'process.env.NODE_ENV': "'development'"}
+        }
+      },
+      {name: 'babel', options: {presets: ['es2015', 'stage-0', 'react']}},
+      {
+        name: 'concat-commonjs',
+        options: {entry: 'examples/index.es6', extensions: ['.es6', '.js']}
       }
-    }
-  ],
-  builds: {
-    'olay-react.es6': 'olay-react.js',
-    'examples/index.es6': 'examples/index.js'
+    ],
+    builds: {'examples/index.es6': 'examples/index.js'}
   }
-};
+];

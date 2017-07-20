@@ -1,5 +1,6 @@
+import OlayReact from '../olay-react';
 import React, {Component} from 'react';
-import OlayReact from 'olay-react';
+import ReactDOM from 'react-dom';
 
 class UserListItem extends Component {
   handleColorChange(ev) {
@@ -18,7 +19,7 @@ class UserListItem extends Component {
   }
 }
 
-export default class UsersList extends Component {
+class UsersList extends Component {
   state = {
     users: this.props.users
   }
@@ -73,4 +74,16 @@ export default class UsersList extends Component {
       </div>
     );
   }
-};
+}
+
+ReactDOM.render(
+  <UsersList
+    users={[
+      {name: 'Casey', color: 'orange'},
+      {name: 'Lacey', color: 'teal'},
+      {name: 'Gunner', color: 'blue'},
+      {name: 'Loki', color: 'red'}
+    ]}
+  />,
+  document.getElementById('users-list')
+);

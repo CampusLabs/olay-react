@@ -30,8 +30,8 @@
 .olay-fade-appear-active .olay-table,
 .olay-fade-enter-active,
 .olay-fade-enter-active .olay-table,
-.olay-fade-leave-active,
-.olay-fade-leave-active .olay-table {
+.olay-fade-exit-active,
+.olay-fade-exit-active .olay-table {
   -webkit-transition: all .25s cubic-bezier(.5, 0, .5, 1);
   -moz-transition: all .25s cubic-bezier(.5, 0, .5, 1);
   -ms-transition: all .25s cubic-bezier(.5, 0, .5, 1);
@@ -41,19 +41,19 @@
 
 .olay-fade-appear,
 .olay-fade-enter,
-.olay-fade-leave.olay-fade-leave-active {
+.olay-fade-exit.olay-fade-exit-active {
   opacity: 0;
 }
 
 .olay-fade-appear.olay-fade-appear-active,
 .olay-fade-enter.olay-fade-enter-active,
-.olay-fade-leave {
+.olay-fade-exit {
   opacity: 1;
 }
 
 .olay-fade-appear .olay-table,
 .olay-fade-enter .olay-table,
-.olay-fade-leave.olay-fade-leave-active .olay-table {
+.olay-fade-exit.olay-fade-exit-active .olay-table {
   -webkit-transform: scale(.95);
   -moz-transform: scale(.95);
   -ms-transform: scale(.95);
@@ -63,7 +63,7 @@
 
 .olay-fade-appear.olay-fade-appear-active .olay-table,
 .olay-fade-enter.olay-fade-enter-active .olay-table,
-.olay-fade-leave .olay-table {
+.olay-fade-exit .olay-table {
   -webkit-transform: scale(1);
   -moz-transform: scale(1);
   -ms-transform: scale(1);

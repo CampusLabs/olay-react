@@ -4,13 +4,6 @@
   <head>
     <title>OlayReact</title>
     <link href='olay-react.css' rel='stylesheet' />
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-with-addons.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.min.js'></script>
-    <script>
-      window.CSSTransitionGroup = React.addons.CSSTransitionGroup;
-    </script>
-    <script src='olay-react.js'></script>
-    <script src='examples/index.js'></script>
     <style>
     body {
       padding: 20px;
@@ -45,17 +38,6 @@
   <body>
     <h1>OlayReact Test</h1>
     <div id='users-list'></div>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        window.ReactDOM.render(window.React.createFactory(window.index)({
-          users: [
-            {name: 'Casey', color: 'orange'},
-            {name: 'Lacey', color: 'teal'},
-            {name: 'Gunner', color: 'blue'},
-            {name: 'Loki', color: 'red'}
-          ]
-        }), document.getElementById('users-list'));
-      });
-    </script>
+    <script src='examples/index.js'></script>
   </body>
 </html>
